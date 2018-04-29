@@ -12,10 +12,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 
+app.use('/students', studentRouter);
+app.use('/tests', testRouter);
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  if (err.status) {
+    res.status(err.status).send(err.message);
+  }
+  else {
+    res.status(500).send('Something broke!');
+  }
 });
 
 
